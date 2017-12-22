@@ -8,6 +8,7 @@ public class AnnouncementCreatorScript : MonoBehaviour
     public InputField AnnouncementInput;
     public Text AnnouncementDisplay;
     
+    //Saves announcement to splashMessage.txt, is later parsed and displayed
     public void DisplayAnnouncement()
     {
         AnnouncementDisplay.text = Announcement.text;

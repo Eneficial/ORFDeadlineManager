@@ -11,7 +11,8 @@ public class SplashScreenManager : MonoBehaviour {
     ScrollbarAutoScroller scroller;
     ScrollbarAutoScroller.ScrollMode buffer;
     bool executing = false;
-	// Use this for initialization
+	
+    //Controls splash screen display length, and message customization
 	void Start () {
         scroller = FindObjectOfType<ScrollbarAutoScroller>();
         if (scroller == null)
@@ -34,11 +35,10 @@ public class SplashScreenManager : MonoBehaviour {
         catch
         {
             Debug.LogWarning("Could not read from file! (does file exist?)");
-            splashText.text = "Powered by demono.net®\nwhere complete chaos™ meets engineers, for maximal fun!";
+            splashText.text = "Sample Announcement";
         }
     }
 	
-	// Update is called once per frame
 	void Update () {
 
         if (scroller.scrollbar.value <= (1 - scroller.percentageDone) && scroller.speed > 0 && !executing)
@@ -49,6 +49,10 @@ public class SplashScreenManager : MonoBehaviour {
         }
     }
 
+    //Controls specifics of splash screen:
+    //How long the transition fade is
+    //How long does the transition occur after the list reaches the bottom
+    //How long the splash screen is displayed for
     IEnumerator Toggle()
     {
         Debug.Log(buffer);
@@ -61,19 +65,15 @@ public class SplashScreenManager : MonoBehaviour {
         }
 
         yield return new WaitForSeconds(fadeInDuration + showDuration);
-       // scroller.mode = buffer;
-       // yield return new WaitForSeconds(2);
+
         foreach (Graphic cv in GetComponentsInChildren<Graphic>())
         {
             cv.CrossFadeAlpha(0, fadeOutDuration, true);
         }
-        //yield return new WaitForSeconds(2);
-
+       
         scroller.mode = buffer;
         scroller.ReachedEnd(); 
-        //yield return new WaitForSeconds(2);
-        
-        //yield return new WaitForSeconds(fadeOutDuration);
+       
         executing = false;
         
     }

@@ -7,7 +7,7 @@ public class MultiDisplayScript : MonoBehaviour {
 
     Camera[] myCams = new Camera[2];
     static MultiDisplayScript multiDisp;
-	// Use this for initialization
+	
 	void Start () {
         if (multiDisp == null)
         {
@@ -22,7 +22,7 @@ public class MultiDisplayScript : MonoBehaviour {
             Destroy(gameObject);
     }
 	
-	// Update is called once per frame
+	
 	void CameraToDisplay () {
         for (int i = 0; i < Display.displays.Length; i++)
         {
@@ -30,8 +30,9 @@ public class MultiDisplayScript : MonoBehaviour {
             Display.displays[i].Activate(); //Enable the display
         }
 
-       
     }
+
+    //If a new display is connected, display it in the logs
     void OnDisplaysUpdated()
     {
         Debug.Log("New Display Connected. Show Display Option Menu....");

@@ -54,7 +54,6 @@
      <Compile Include="Assets\Scripts\PersistentObject.cs" />
      <Compile Include="Assets\Scripts\ScrollbarAutoScroller.cs" />
      <Compile Include="Assets\Scripts\SplashScreenManager.cs" />
-     <Compile Include="Assets\Scripts\SuspiciousScript.cs" />
      <Compile Include="Assets\Scripts\UIManagerScript.cs" />
      <Compile Include="Assets\Scripts\XMLDeadline.cs" />
      <Compile Include="Assets\Scripts\XMLDeadlineDisplay.cs" />

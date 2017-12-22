@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ElementResizeManager : MonoBehaviour {
+
+    //This entire class is to resize deadline manager elements so it works on any display
     public RectTransform tParent;
     void OnRectTransformDimensionsChange()
     {
@@ -13,7 +15,7 @@ public class ElementResizeManager : MonoBehaviour {
     {
         if (tParent == null)
         {
-            Debug.LogError("Parent not found :c");
+            Debug.LogError("Parent not found");
             return;
         }
         if (GetComponent<RectTransform>().sizeDelta.y > tParent.sizeDelta.y)

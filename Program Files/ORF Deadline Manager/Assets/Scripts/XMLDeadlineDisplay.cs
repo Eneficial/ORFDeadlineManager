@@ -17,26 +17,25 @@ public class XMLDeadlineDisplay : MonoBehaviour
     public XMLDeadline xmlDeadLineScript;
 
     public GameObject deadLinePrefab, entryList, teamPrefab;
-    public float cellMargin = 10; //Clean up coming soon
+    public float cellMargin = 10;
 
-    Transform listEnd; //Clean up coming soon
+    Transform listEnd; 
     List<Image> pastDeadlines = new List<Image>();
 
     float timer = 0;
     Color original;
-    // Use this for initialization
+
     void Start()
     {
         parseXmlFile(Application.dataPath + DeadlineDBPath);
-        //listEnd = GameObject.FindGameObjectWithTag("listEnd").transform;
         original = deadLinePrefab.GetComponent<Image>().color;
 
-
-
     }
+
+    //Controls how fast deadlines flash red when overdue
     void Update()
     {
-        timer += Time.deltaTime;      
+        timer += Time.deltaTime;
 
         if (timer >= 0.7f)
         {
@@ -52,6 +51,7 @@ public class XMLDeadlineDisplay : MonoBehaviour
 
     }
 
+    //Parses XML file that stores deadlines - Prepares for sorting
     void parseXmlFile(string xmlData)
     {
         XmlDocument xmlDoc = new XmlDocument();
@@ -71,7 +71,6 @@ public class XMLDeadlineDisplay : MonoBehaviour
             XmlNode team = description.NextSibling;
 
 
-            //deadlines.Add("Title : " + title.InnerXml + "\nAuthor : " + author.InnerXml + "\nDue Date : " + duedate.InnerXml + "\nDescription : " + description.InnerXml + "\n\n");
             string[] dedl = { title.InnerText, author.InnerXml, description.InnerXml, duedate.InnerXml, team.InnerXml };
             deadlines.Add(dedl);
         }
@@ -85,10 +84,10 @@ public class XMLDeadlineDisplay : MonoBehaviour
 
     }
 
+    //Sorts deadlines by date. The sooner the deadline is from the current date, the higher it will appear on the list. Overdue deadlines take priority.
     public static List<string[]> Quicksort(List<string[]> elements, int left, int right)
     {
         int i = left, j = right;
-        //Debug.Log(elements[(left + right) / 2].Split('\n')[2].Substring(10).Trim());
 
         DateTime pivot = DateTime.ParseExact(elements[(left + right) / 2][3], "MM/dd/yyyy", CultureInfo.InvariantCulture);
 
@@ -130,42 +129,31 @@ public class XMLDeadlineDisplay : MonoBehaviour
         return elements;
     }
 
-    void FitList(int lenght) //Deprecated, clean up coming soon
+    //Makes deadline entries scale up or down depending on the size of the display it's on.
+    void FitList(int lenght) 
     {
-       // GameObject[] entries = GameObject.FindGameObjectsWithTag("entry");
+       
         RectTransform list = entryList.GetComponent<RectTransform>();
         Debug.Log(lenght + " || " + deadLinePrefab.GetComponent<RectTransform>().rect.height);
-        /* foreach (GameObject entry in entries)
-         {
-             while (listEnd.position.y > entry.transform.position.y)
-             {
-                 entryList.GetComponent<RectTransform>().sizeDelta += new Vector2(0, Mathf.Abs(entry.transform.position.y - listEnd.position.y) + cellMargin);
-                 Debug.Log(entry.GetComponentInChildren<Text>().text + " || " + listEnd.position.y + " : " + entry.transform.position.y);
-             }
-         }*/
         Debug.Log(list.sizeDelta);
         float size = 0;
         for (int i = 0; i < lenght; i++)
-            size += deadLinePrefab.GetComponent<RectTransform>().rect.height;//entries[i].GetComponent<RectTransform>().rect.height;
+            size += deadLinePrefab.GetComponent<RectTransform>().rect.height;
 
         Debug.Log(size);
-        list.sizeDelta = new Vector2(list.sizeDelta.x, size);// - deadLinePrefab.GetComponent<RectTransform>().rect.height);
+        list.sizeDelta = new Vector2(list.sizeDelta.x, size);
         Debug.Log(list.sizeDelta);
-
-       /* while (list.sizeDelta.y < size)
-            list.sizeDelta += new Vector2(0, cellMargin);*/
             
     }
 
-
+    //Sorts deadlines by teams, and by how soon the deadline is to the current date.
     IEnumerator PlaceEntryByTeam(List<string[]> deadlines)
     {
         List<string[]>[] sorted = new List<string[]>[9];
         for (int i = 0; i <sorted.Length; i++)
             sorted[i] = new List<string[]>();
 
-        /*
-         * 
+        /* 
          * [0] = Build Team
          * [1] = Programming Team
          * [2] = Photo/Video Team    
@@ -176,6 +164,7 @@ public class XMLDeadlineDisplay : MonoBehaviour
          * [7] = Important Dates
          * [8] = ERROR ENTRIES, something went wrong in the entry making process
          */
+
         foreach (string[] d in deadlines)
         {
             switch (d[4])
@@ -294,20 +283,18 @@ public class XMLDeadlineDisplay : MonoBehaviour
                 entry.GetComponentInChildren<Button>().onClick.AddListener(delegate { xmlDeadLineScript.DeleteDeadline(entry); });
 
 
-            //entry.GetComponentInChildren<ElementResizeManager>().Resize();
                 entry.GetComponent<RectTransform>().localPosition = relativePos;
                 yield return null;
-                // relativePos = entry.GetComponent<RectTransform>().localPosition - (new Vector3(0, cellMargin + deadLinePrefab.GetComponent<RectTransform>().rect.height, 0));
             }
 
         }
 
     }
 
+    //Organizes the information placement on deadline entries. 
     IEnumerator PlaceEntry(List<string[]> deadlines)
     {
-       // FitList(deadlines.Count);
-        Vector3 relativePos = new Vector3(0, deadLinePrefab.GetComponent<RectTransform>().rect.height/2, 0); //-deadLinePrefab.GetComponent<RectTransform>().rect.height/2
+        Vector3 relativePos = new Vector3(0, deadLinePrefab.GetComponent<RectTransform>().rect.height/2, 0); 
         foreach (string[] dl in deadlines)
         {
             GameObject entry = Instantiate(deadLinePrefab, entryList.transform) as GameObject;
@@ -346,11 +333,8 @@ public class XMLDeadlineDisplay : MonoBehaviour
             if (entry.GetComponentInChildren<Button>() != null)
                 entry.GetComponentInChildren<Button>().onClick.AddListener(delegate { xmlDeadLineScript.DeleteDeadline(entry); });
 
-
-            //entry.GetComponentInChildren<ElementResizeManager>().Resize();
             entry.GetComponent<RectTransform>().localPosition = relativePos;
             yield return null;
-           // relativePos = entry.GetComponent<RectTransform>().localPosition - (new Vector3(0, cellMargin + deadLinePrefab.GetComponent<RectTransform>().rect.height, 0));
             
 
         }

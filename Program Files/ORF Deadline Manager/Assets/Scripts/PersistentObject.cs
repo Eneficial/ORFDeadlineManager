@@ -7,7 +7,8 @@ public class PersistentObject : MonoBehaviour {
 
     static public PersistentObject persitentObject;
     public bool sortByTeam = false;
-    // Use this for initialization
+   
+    //Saves sortByTeam when deadlines are created, deleted, or sorted differently. 
     void Start()
     {
         persitentObject = (persitentObject == null) ? this : persitentObject;

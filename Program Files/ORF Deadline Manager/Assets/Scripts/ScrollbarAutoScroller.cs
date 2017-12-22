@@ -5,14 +5,10 @@ using UnityEngine.UI;
 
 public class ScrollbarAutoScroller : MonoBehaviour
 {
-
-
-
     public Scrollbar scrollbar;
     public float speed = 10f, percentageDone = 0.99f, paddingInSeconds = 0.2f, waitForSecondsAtStart = 0.2f;
     public ScrollMode mode = ScrollMode.startOver;
     public GameObject listsize;
-
 
 
     public enum ScrollMode
@@ -35,6 +31,7 @@ public class ScrollbarAutoScroller : MonoBehaviour
         scrollbar.value = 1;
     }
 
+    //Controls how fast the autoscroll is when scrolling to the end of the list
     void Update() 
     {
 
@@ -53,7 +50,7 @@ public class ScrollbarAutoScroller : MonoBehaviour
             }
             else
                 timer = 0;
-            //StartCoroutine(Sleep());
+            
             ReachedEnd();
            
         }
@@ -62,7 +59,10 @@ public class ScrollbarAutoScroller : MonoBehaviour
         scrollTimer += Time.deltaTime * (100 / listsize.GetComponent<RectTransform>().rect.height);
 
     }
-
+    
+    //Two options for when the deadline has reached the end, currently using ScrollMode.startOver
+    //Backtrack makes the list scroll back up in reverse
+    //Start over makes the list start over again from the top
     public void ReachedEnd()
     {
         
@@ -84,10 +84,4 @@ public class ScrollbarAutoScroller : MonoBehaviour
                 break;
         }
     }
-
-   /*public IEnumerator Sleep()
-    {
-        yield return new WaitForSeconds(10);
-    }*/
-
 }

@@ -27,32 +27,29 @@ public class XMLDeadline : MonoBehaviour {
 
    public GameObject ErrorObject;
 
-    // Use this for initialization
     public void Start()
     {
         XML = this;
         LoadDeadline();
     }
 
-
+    //Saves information that's entered in textboxes on the "create a deadline" menu into DeadlineDB.xml
     public void SaveDeadline()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(DeadlineDB));
-        //FileStream stream = new FileStream(Application.dataPath + "/StreamingAssets/XML/DeadlineDB.xml", FileMode.Create);
         using (StreamWriter sw = new StreamWriter(Application.dataPath + "/StreamingAssets/XML/DeadlineDB.xml", false, Encoding.UTF8))
         {
             serializer.Serialize(sw, deadlineDB);
         }
-        //serializer.Serialize(stream, deadlineDB);
-        //stream.Close();
+      
         Title.text = "";
         Description.text = "";
         DueDate.text = "";
         Author.text = "";
-        //Team.text = "";
 
     }
 
+    //Loads deadlines from DeadlineDB.xml
     public void LoadDeadline() {
         XmlSerializer serializer = new XmlSerializer(typeof(DeadlineDB));
         FileStream stream = new FileStream(Application.dataPath + "/StreamingAssets/XML/DeadlineDB.xml", FileMode.Open);
@@ -60,6 +57,7 @@ public class XMLDeadline : MonoBehaviour {
         stream.Close();
     }
 
+    //Deletes deadlines from the DeadlineDB.xml, refreshes screen upon deletion
     public void DeleteDeadline(GameObject entry) 
     {
         string title = "";
@@ -85,6 +83,10 @@ public class XMLDeadline : MonoBehaviour {
         
     }
 
+    //A validation system to make sure there aren't a lot of incorrectly entered deadlines. Most common errors when creating deadlines are 
+    //1. Entering the date in the wrong format 
+    //2. Using a title that already exists
+    //Preventative messures have been put in to stop the deadline from being created if there is an error in the entry
     public void ValidateInput()
     {
         bool gotError = false;
@@ -118,6 +120,7 @@ public class XMLDeadline : MonoBehaviour {
         }
     }
 
+    //Displays error message from ValidateInput()
     IEnumerator showWarning(string errorMessage)
     {
         ErrorObject.GetComponentInChildren<Text>().text = errorMessage;
@@ -161,7 +164,5 @@ public class XMLDeadline : MonoBehaviour {
         public List<DeadLineEntry> DeadLineList = new List<DeadLineEntry>();
      
     }
-
-
 
 }
