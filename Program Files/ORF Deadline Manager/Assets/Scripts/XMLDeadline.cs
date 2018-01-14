@@ -18,9 +18,17 @@ public class XMLDeadline : MonoBehaviour {
    public InputField Description;
    public InputField DueDate;
    public InputField Author;
+
+   public InputField TitleEdit;
+   public InputField DescriptionEdit;
+   public InputField DueDateEdit;
+   public InputField AuthorEdit;
+
    public Dropdown Team;
+   public Dropdown DeadlineEdit;
 
    public Button SubmitButton;
+   public Button SubmitEditsButton;
    public Button CompletedButton;
    
    public DeadlineDB deadlineDB;
@@ -31,7 +39,10 @@ public class XMLDeadline : MonoBehaviour {
     {
         XML = this;
         LoadDeadline();
+        LoadDeadlineEdit("title here");
+        
     }
+
 
     //Saves information that's entered in textboxes on the "create a deadline" menu into DeadlineDB.xml
     public void SaveDeadline()
@@ -79,9 +90,57 @@ public class XMLDeadline : MonoBehaviour {
                 break;
             }
         }
-
-        
+ 
     }
+
+    //Update the edit deadline dropdown list
+    public void UpdateEditDropdownValues()
+    {
+        List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
+        foreach(DeadLineEntry entry in deadlineDB.DeadLineList)
+        {
+            options.Add(new Dropdown.OptionData(entry.Title));
+        }
+        DeadlineEdit.ClearOptions();
+        DeadlineEdit.options = options;
+        DeadlineEdit.RefreshShownValue();
+    }
+
+    //Load deadline information into input fields
+    public void LoadDeadlineEdit(string title)
+    {
+        foreach (DeadLineEntry entry in deadlineDB.DeadLineList)
+        {
+            if (title == entry.Title)
+            {
+                TitleEdit.text = title;
+                DescriptionEdit.text = entry.Description;
+                DueDateEdit.text = entry.DueDate;
+                AuthorEdit.text = entry.Author;
+            }
+        }
+    }
+
+    public bool EditDeadline(string oldTitle, string title, string desc, string due, string author, string team)
+    {
+
+        //Save edited deadline, and overwrite old deadline
+        foreach (DeadLineEntry entry in deadlineDB.DeadLineList)
+        {
+        
+            if (oldTitle.ToLower() == entry.Title.ToLower())
+            {
+                DeadLineEntry e = new DeadLineEntry(title, desc, due, author, team);
+                deadlineDB.DeadLineList.Add(e);
+                deadlineDB.DeadLineList.Remove(entry);
+                SaveDeadline();
+                SceneManager.LoadScene("Deadline"); //Might want to load some other scene?
+                return true;
+            }
+        }
+        return true;
+    } 
+
 
     //A validation system to make sure there aren't a lot of incorrectly entered deadlines. Most common errors when creating deadlines are 
     //1. Entering the date in the wrong format 
@@ -119,6 +178,7 @@ public class XMLDeadline : MonoBehaviour {
             SceneManager.LoadScene("Deadlines");
         }
     }
+
 
     //Displays error message from ValidateInput()
     IEnumerator showWarning(string errorMessage)

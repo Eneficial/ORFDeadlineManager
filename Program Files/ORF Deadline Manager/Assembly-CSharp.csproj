@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\ScrollbarAutoScroller.cs" />
      <Compile Include="Assets\Scripts\SplashScreenManager.cs" />
      <Compile Include="Assets\Scripts\UIManagerScript.cs" />
+     <Compile Include="Assets\Scripts\UpdateOptionsOnEnable.cs" />
      <Compile Include="Assets\Scripts\XMLDeadline.cs" />
      <Compile Include="Assets\Scripts\XMLDeadlineDisplay.cs" />
      <None Include="Assets\StreamingAssets\splashMessage.txt" />

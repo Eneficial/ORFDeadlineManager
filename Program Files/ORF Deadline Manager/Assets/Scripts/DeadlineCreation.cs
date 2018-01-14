@@ -9,6 +9,7 @@ public class DeadlineCreation : MonoBehaviour
     public GameObject Panel;
     public GameObject Panel2;
     public GameObject Panel3;
+    public GameObject Panel4;
 
     public void showhidePanel()
     {
@@ -26,5 +27,10 @@ public class DeadlineCreation : MonoBehaviour
     {
        
         Panel3.gameObject.SetActive(!Panel2.gameObject.activeSelf);
+    }
+
+    public void showhideEdit()
+    {
+        Panel4.gameObject.SetActive(!Panel2.gameObject.activeSelf);
     }
 }
