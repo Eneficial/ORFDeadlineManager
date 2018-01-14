@@ -14,6 +14,8 @@ public class XMLDeadline : MonoBehaviour {
 
    public static XMLDeadline XML;
 
+   public string titleToEdit;
+
    public InputField Title;
    public InputField Description;
    public InputField DueDate;
@@ -40,7 +42,6 @@ public class XMLDeadline : MonoBehaviour {
         XML = this;
         LoadDeadline();
         LoadDeadlineEdit("title here");
-        
     }
 
 
@@ -113,6 +114,7 @@ public class XMLDeadline : MonoBehaviour {
         {
             if (title == entry.Title)
             {
+                titleToEdit = title;
                 TitleEdit.text = title;
                 DescriptionEdit.text = entry.Description;
                 DueDateEdit.text = entry.DueDate;
@@ -123,22 +125,25 @@ public class XMLDeadline : MonoBehaviour {
 
     public bool EditDeadline(string oldTitle, string title, string desc, string due, string author, string team)
     {
-
         //Save edited deadline, and overwrite old deadline
         foreach (DeadLineEntry entry in deadlineDB.DeadLineList)
         {
-        
+            TitleEdit.text = "";
+            DescriptionEdit.text = "";
+            DueDateEdit.text = "";
+            AuthorEdit.text = "";
+
+
             if (oldTitle.ToLower() == entry.Title.ToLower())
             {
                 DeadLineEntry e = new DeadLineEntry(title, desc, due, author, team);
                 deadlineDB.DeadLineList.Add(e);
                 deadlineDB.DeadLineList.Remove(entry);
                 SaveDeadline();
-                SceneManager.LoadScene("Deadline"); //Might want to load some other scene?
                 return true;
             }
         }
-        return true;
+        return false;
     } 
 
 
@@ -176,6 +181,44 @@ public class XMLDeadline : MonoBehaviour {
             deadlineDB.DeadLineList.Add(entry);
             SaveDeadline();
             SceneManager.LoadScene("Deadlines");
+        }
+    }
+
+    public void ValidateEditInput()
+    {
+        bool gotError = false;
+        string errorMessage = "";
+        if (TitleEdit.text.ToLower() != titleToEdit.ToLower())
+            foreach (DeadLineEntry entry in deadlineDB.DeadLineList)
+            {
+                if (entry.Title.ToLower() == TitleEdit.text.ToLower())
+                {
+                    gotError = true;
+                    errorMessage += "A deadline with this title does already exist!\n";
+                }
+            }
+        DateTime date;
+
+        if (!DateTime.TryParseExact(DueDateEdit.text.Trim(), "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+        {
+            gotError = true;
+            errorMessage += "Due date has to be in the format of: \"MM/dd/yyyy\"!";
+        }
+
+        if (gotError)
+        {
+            StartCoroutine(showWarning(errorMessage));
+        }
+        else
+        {
+            if (!EditDeadline(titleToEdit, TitleEdit.text, DescriptionEdit.text, DueDateEdit.text, AuthorEdit.text, Team.captionText.text))
+            {
+                StartCoroutine(showWarning("No deadline has a matching title"));
+            }
+            else
+            {
+                SceneManager.LoadScene("Deadlines");
+            }
         }
     }
 
@@ -219,6 +262,7 @@ public class XMLDeadline : MonoBehaviour {
         Team;
     }
 
+   
     [System.Serializable]
     public class DeadlineDB  {
         public List<DeadLineEntry> DeadLineList = new List<DeadLineEntry>();

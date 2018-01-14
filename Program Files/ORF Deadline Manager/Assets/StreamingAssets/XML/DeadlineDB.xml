@@ -9,13 +9,6 @@
       <Team>Other</Team>
     </DeadLineEntry>
     <DeadLineEntry>
-      <Author>Rasmus</Author>
-      <Title>Flamethrower robot</Title>
-      <DueDate>02/28/2018</DueDate>
-      <Description>now legal in FIRST</Description>
-      <Team>Programming</Team>
-    </DeadLineEntry>
-    <DeadLineEntry>
       <Author>Fluff Guy</Author>
       <Title>Fluff entry</Title>
       <DueDate>12/09/2018</DueDate>
@@ -28,6 +21,13 @@
       <DueDate>09/20/2018</DueDate>
       <Description>azsdfghjk</Description>
       <Team>Spirit Team</Team>
+    </DeadLineEntry>
+    <DeadLineEntry>
+      <Author>Rasmus</Author>
+      <Title>Flamethrower robot</Title>
+      <DueDate>02/28/2019</DueDate>
+      <Description>now legal in FIRST - CONFIRMED FOR 2019</Description>
+      <Team>Build Team</Team>
     </DeadLineEntry>
   </DeadLineList>
 </DeadlineDB>
